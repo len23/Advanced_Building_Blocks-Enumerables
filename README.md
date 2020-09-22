@@ -1,8 +1,8 @@
 ![](https://img.shields.io/badge/Microverse-blueviolet)
 
-# Bubble Sort
+# Enumerables Methods
 
-> Sorting arrays using loops, conditionals and yield.
+> Cloning Ruby enumerables methods.
 
 ## Built With
 
@@ -29,7 +29,7 @@ Give the methods inside the file "app.rb" a random array and type in your termin
 
 ### Usage
 
-Sorting arrays.
+Practicing to build the methods manually
 
 ### Run tests
 
@@ -53,7 +53,7 @@ rubocop
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](https://github.com/martinnajjar12/bubble_sort/issues).
+Feel free to check the [issues page](https://github.com/len23/Advanced_Building_Blocks-Enumerables/issues).
 
 ## Show your support
 
@@ -65,4 +65,4 @@ One of the Odin projects.
 
 ## 📝 License
 
-This project is [MIT](https://github.com/martinnajjar12/bubble_sort/blob/master/LICENSE) licensed.
+This project is [MIT](https://github.com/len23/Advanced_Building_Blocks-Enumerables/blob/development/LICENSE) licensed.
