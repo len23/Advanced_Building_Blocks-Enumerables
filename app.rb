@@ -58,8 +58,30 @@ module Enumerable
     end
     boolean
   end
+
+  def my_count
+    counter = 0
+    self.my_each do |element| 
+      if yield(element)
+        counter += 1
+      end
+    end
+    counter
+  end
+
+  def my_map
+    new_arr = []
+    self.my_each do |element|
+        new_arr << yield(element)
+    end
+    new_arr
+  end
+
+  def my_inject(initial=self[0])
+    accum = initial
+    self.my_each do |element|
+      accum = yield(accum,element)
+    end
+    accum
+  end
 end
-
-arr_nums = [4,55,10,4,5]
-
-p arr_nums.my_none? { |number| number == 3 }
