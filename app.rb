@@ -67,10 +67,14 @@ module Enumerable
     counter
   end
 
-  def my_map
+  def my_map(proc1 = nil)
     new_arr = []
     my_each do |element|
-      new_arr << yield(element)
+      new_arr << if proc1.nil?
+                   yield(element)
+                 else
+                   proc1.call(element)
+                 end
     end
     new_arr
   end
@@ -81,10 +85,11 @@ module Enumerable
       my_each_with_index do |element, index|
         break if index + 1 == length
 
-        if index.zero? accum = yield(element, self[index + 1])
-        else
-          accum = yield(accum, self[index + 1])
-        end
+        accum = if index.zero?
+                  yield(element, self[index + 1])
+                else
+                  yield(accum, self[index + 1])
+                end
       end
     else
       accum = initial
@@ -93,17 +98,6 @@ module Enumerable
       end
     end
     accum
-  end
-
-  def my_map_proc(proc1 = nil)
-    new_arr = []
-    my_each do |element|
-      if proc1.nil? new_arr << yield(element)
-      else
-        new_arr << p1.call(element)
-      end
-    end
-    new_arr
   end
 end
 
