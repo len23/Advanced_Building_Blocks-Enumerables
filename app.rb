@@ -1,7 +1,6 @@
 module Enumerable
   def my_each
-    ary = self
-    for value in ary do
+    for value in self do
       yield(value)
     end
   end
@@ -16,7 +15,7 @@ module Enumerable
   def my_select
     new_arr = []
     self.my_each do |element|
-      if yield(element) then new_arr << element
+      yield(element) && new_arr << element
     end
     new_arr
   end
@@ -54,10 +53,16 @@ module Enumerable
     boolean
   end
 
-  def my_count
+  def my_count(argument = nil)
     counter = 0
-    self.my_each do |element|
-      if yield(element) then counter += 1
+    if argument.nil?
+      self.my_each do |element|
+        yield(element) && counter += 1
+      end
+    else
+      self.my_each do |element|
+        argument == element && counter += 1
+      end
     end
     counter
   end
@@ -72,35 +77,33 @@ module Enumerable
 
   def my_inject(initial = nil)
     accum = 0
-    if initial == nil
+    if initial.nil?
       initial = self[0]
       self.my_each_with_index do |element, index|
-        if index + 1 == self.length
-          break
+        break if index + 1 == self.length
+        if index.zero?
+          accum = yield(element, self[index + 1])
         else
-          if index == 0
-            accum = yield(element, self[index + 1])
-          else
-            accum = yield(accum, self[index + 1])
-          end
+          accum = yield(accum, self[index + 1])
         end
       end
     else
       accum = initial
       self.my_each do |element|
         accum = yield(accum, element)
+      end
     end
     accum
   end
 
-  def my_map_proc(p1=nil)
+  def my_map_proc(proc1 = nil)
     new_arr = []
     self.my_each do |element|
-     if p1 == nil
+      if p1.nil?
         new_arr << yield(element)
-     else
+      else
         new_arr << p1.call(element)
-     end
+      end
     end
     new_arr
   end
@@ -109,3 +112,9 @@ end
 def multiply_els(array)
   array.my_inject { |sum, num| sum * num }
 end
+
+# array = [1, 2, 3, 4]
+
+# proc1 = Proc.new { |n| n * 2}
+
+# p array.my_map_proc(proc1)
