@@ -83,13 +83,23 @@ module Enumerable
 
   def my_count(argument = nil)
     counter = 0
-    if argument.nil?
-      my_each do |element|
-        yield(element) && counter += 1
+    if block_given?
+      if argument.nil?
+        my_each do |element|
+          yield(element) && counter += 1
+        end
+      else
+        my_each do |element|
+          argument == element && counter += 1
+        end
       end
     else
-      my_each do |element|
-        argument == element && counter += 1
+      if argument.nil?
+        counter= self.to_a.length
+      else
+        my_each do |element|
+          argument == element && counter += 1
+        end
       end
     end
     counter
@@ -136,9 +146,3 @@ end
 def multiply_els(array)
   array.my_inject { |sum, num| sum * num }
 end
-
-array = [1, 2, 3, 4]
-
-# p array.each
-
-p "Hello there".my_each_with_index{ |x| x }
