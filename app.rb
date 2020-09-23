@@ -1,23 +1,51 @@
 module Enumerable
   def my_each
-    for value in self do
-      yield(value)
+    if block_given?
+      if self.kind_of?(Range)
+        ary = self.to_a
+        for value in ary do
+          yield(value)
+        end
+      else
+        for value in self do
+          yield(value)
+        end
+      end
+    else
+      to_enum :my_each
     end
   end
 
   def my_each_with_index
-    ary = self
-    for index in 0..ary.length - 1 do
-      yield(ary[index], index)
+    if block_given?
+      if self.kind_of?(Range)
+        ary = self.to_a
+        for index in 0..ary.length - 1 do
+          yield(ary[index], index)
+        end
+        ary
+      else
+        ary = self
+        for index in 0..ary.length - 1 do
+          yield(ary[index], index)
+        end
+        ary
+      end
+    else
+      to_enum :my_each_with_index
     end
   end
 
   def my_select
-    new_arr = []
-    my_each do |element|
-      yield(element) && new_arr << element
+    if block_given?
+      new_arr = []
+      my_each do |element|
+        yield(element) && new_arr << element
+      end
+      new_arr
+    else
+      to_enum :my_select
     end
-    new_arr
   end
 
   def my_all?
@@ -68,15 +96,19 @@ module Enumerable
   end
 
   def my_map(proc1 = nil)
-    new_arr = []
-    my_each do |element|
-      new_arr << if proc1.nil?
-                   yield(element)
-                 else
-                   proc1.call(element)
-                 end
+    if block_given?
+      new_arr = []
+      my_each do |element|
+        new_arr << if proc1.nil?
+                    yield(element)
+                  else
+                    proc1.call(element)
+                  end
+      end
+      new_arr
+    else
+      to_enum :my_map
     end
-    new_arr
   end
 
   def my_inject(initial = nil)
@@ -104,3 +136,9 @@ end
 def multiply_els(array)
   array.my_inject { |sum, num| sum * num }
 end
+
+array = [1, 2, 3, 4]
+
+# p array.each
+
+p "Hello there".my_each_with_index{ |x| x }
