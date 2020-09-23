@@ -1,3 +1,5 @@
+require 'pry'
+
 module Enumerable
   def my_each
     if block_given?
@@ -48,22 +50,38 @@ module Enumerable
     end
   end
 
-  def my_all?
+  def my_all?(argument)
     boolean = true
-    if block_given?
-      my_each do |element|
-        unless yield(element)
+    if argument.nil?
+      if block_given?
+        my_each do |element|
+          unless yield(element)
+            boolean = false
+            break
+          end
+        end
+      else
+        my_each do |element|
+          if element.nil? || element == false
+            boolean = false
+            break
+          end
+        end
+      end
+    elsif argument.class == Regexp
+      my_each { |element|
+        unless argument.to_s.match?(element)
           boolean = false
           break
         end
-      end
+      }
     else
-      my_each do |element|
-        if element.nil? || element == false
+      my_each { |element|
+        if element.class != argument
           boolean = false
           break
         end
-      end
+      }
     end
     boolean
   end
@@ -176,4 +194,4 @@ def multiply_els(array)
   array.my_inject { |sum, num| sum * num }
 end
 
-p [2,3,4].my_inject(:*)
+p [20, 25, 32, 2].my_all?(Float)
