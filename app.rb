@@ -50,7 +50,7 @@ module Enumerable
     end
   end
 
-  def my_all?(argument)
+  def my_all?(argument = nil)
     boolean = true
     if argument.nil?
       if block_given?
@@ -70,7 +70,14 @@ module Enumerable
       end
     elsif argument.class == Regexp
       my_each { |element|
-        unless argument.to_s.match?(element)
+        unless argument.match?(element)
+          boolean = false
+          break
+        end
+      }
+    elsif argument.class == Integer || argument.class == Float
+      my_each { |element|
+        unless element == argument
           boolean = false
           break
         end
@@ -86,24 +93,88 @@ module Enumerable
     boolean
   end
 
-  def my_any?
+  def my_any?(argument = nil)
     boolean = false
-    my_each do |element|
-      if yield(element)
-        boolean = true
-        break
+    if argument.nil?
+      if block_given?
+        my_each do |element|
+          if yield(element)
+            boolean = true
+            break
+          end
+        end
+      else
+        my_each do |element|
+          unless element.nil? || element == false
+            boolean = true
+            break
+          end
+        end
       end
+    elsif argument.class == Regexp
+      my_each { |element|
+        unless argument.match?(element)
+          boolean = true
+          break
+        end
+      }
+    elsif argument.class == Integer || argument.class == Float
+      my_each { |element|
+        if element == argument
+          boolean = true
+          break
+        end
+      }
+    else
+      my_each { |element|
+        if element.class == argument
+          boolean = true
+          break
+        end
+      }
     end
     boolean
   end
 
-  def my_none?
+  def my_none?(argument = nil)
     boolean = true
-    my_each do |element|
-      if yield(element)
-        boolean = false
-        break
+    if argument.nil?
+      if block_given?
+        my_each do |element|
+          if yield(element)
+            boolean = false
+            break
+          end
+        end
+      else
+        my_each do |element|
+          unless element.nil? || element == false
+            boolean = false
+            break
+          end
+        end
       end
+    elsif argument.class == Regexp
+      my_each { |element|
+        if argument.match?(element)
+          boolean = false
+          break
+        end
+      }
+    elsif argument.class == Integer || argument.class == Float
+      my_each { |element|
+        if element == argument
+          boolean = false
+          break
+        end
+      }
+    else
+      my_each { |element|
+        if element.class == argument
+          boolean = false
+          break
+        end
+      }
     end
     boolean
   end
@@ -194,4 +265,3 @@ def multiply_els(array)
   array.my_inject { |sum, num| sum * num }
 end
 
-p [20, 25, 32, 2].my_all?(Float)
