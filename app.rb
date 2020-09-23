@@ -62,6 +62,7 @@ module Enumerable
         if element.nil? || element == false
           boolean = false
           break
+        end
       end
     end
     boolean
@@ -198,6 +199,7 @@ module Enumerable
     end
     accum
   end
+
 end
 
 def multiply_els(array)
