@@ -132,38 +132,18 @@ module Enumerable
 
   def my_inject(initial = nil, argument = nil)
     accum = 0
-    if initial.nil?
-      my_each_with_index do |element, index|
-        break if index + 1 == length
-
-        accum = if index.zero?
-                  yield(element, self[index + 1])
-                else
-                  yield(accum, self[index + 1])
-                end
-      end
-    else
-      accum = initial
-      my_each do |element|
-        accum = yield(accum, element)
-      end
-    end
-    accum
-  end
-
-  def new_my_inject(initial = nil, argument = nil)
-    accum = 0
     if initial.nil? && argument.nil?
-      my_each_with_index do |element, index|
-        break if index + 1 == length end
+      my_each_with_index { |element, index|
+        break if index + 1 == length
   
-        accum = if index.zero?
+        accum = if index == 0
                   yield(element, self[index + 1])
                 else
                   yield(accum, self[index + 1])
                 end
+              }
     elsif argument.nil?
-      if initial.is_sym?
+      if initial.class == Symbol
         argument = initial
         initial = nil
         my_each_with_index do |element, index|
@@ -181,16 +161,6 @@ module Enumerable
           accum = yield(accum, element)
         end
       end
-    # elsif initial.nil?
-    #   my_each_with_index do |element, index|
-    #     break if index + 1 == length
-  
-    #     accum = if index.zero?
-    #               eval "#{element} #{argument} #{self[index + 1]}"
-    #             else
-    #               eval "#{accum} #{argument} #{self[index + 1]}"
-    #             end
-    #   end
     else
       accum = initial
       my_each do |element|
@@ -206,4 +176,4 @@ def multiply_els(array)
   array.my_inject { |sum, num| sum * num }
 end
 
-p [2,3,4].new_my_inject(nil, :+)
+p [2,3,4].my_inject(:*)
