@@ -3,8 +3,8 @@ require 'pry'
 module Enumerable
   def my_each
     if block_given?
-      if self.kind_of?(Range)
-        ary = self.to_a
+      if is_a?(Range)
+        ary = to_a
         for value in ary do
           yield(value)
         end
@@ -20,19 +20,15 @@ module Enumerable
 
   def my_each_with_index
     if block_given?
-      if self.kind_of?(Range)
-        ary = self.to_a
-        for index in 0..ary.length - 1 do
-          yield(ary[index], index)
-        end
-        ary
-      else
-        ary = self
-        for index in 0..ary.length - 1 do
-          yield(ary[index], index)
-        end
-        ary
+      ary = if is_a?(Range)
+              to_a
+            else
+              self
+            end
+      for index in 0..ary.length - 1 do
+        yield(ary[index], index)
       end
+      ary
     else
       to_enum :my_each_with_index
     end
@@ -69,26 +65,26 @@ module Enumerable
         end
       end
     elsif argument.class == Regexp
-      my_each { |element|
+      my_each do |element|
         unless argument.match?(element)
           boolean = false
           break
         end
-      }
+      end
     elsif argument.class == Integer || argument.class == Float
-      my_each { |element|
+      my_each do |element|
         unless element == argument
           boolean = false
           break
         end
-      }
+      end
     else
-      my_each { |element|
+      my_each do |element|
         if element.class != argument
           boolean = false
           break
         end
-      }
+      end
     end
     boolean
   end
@@ -112,26 +108,26 @@ module Enumerable
         end
       end
     elsif argument.class == Regexp
-      my_each { |element|
+      my_each do |element|
         unless argument.match?(element)
           boolean = true
           break
         end
-      }
+      end
     elsif argument.class == Integer || argument.class == Float
-      my_each { |element|
+      my_each do |element|
         if element == argument
           boolean = true
           break
         end
-      }
+      end
     else
-      my_each { |element|
+      my_each do |element|
         if element.class == argument
           boolean = true
           break
         end
-      }
+      end
     end
     boolean
   end
@@ -155,26 +151,26 @@ module Enumerable
         end
       end
     elsif argument.class == Regexp
-      my_each { |element|
+      my_each do |element|
         if argument.match?(element)
           boolean = false
           break
         end
-      }
+      end
     elsif argument.class == Integer || argument.class == Float
-      my_each { |element|
+      my_each do |element|
         if element == argument
           boolean = false
           break
         end
-      }
+      end
     else
-      my_each { |element|
+      my_each do |element|
         if element.class == argument
           boolean = false
           break
         end
-      }
+      end
     end
     boolean
   end
@@ -191,13 +187,11 @@ module Enumerable
           argument == element && counter += 1
         end
       end
+    elsif argument.nil?
+      counter = to_a.length
     else
-      if argument.nil?
-        counter= self.to_a.length
-      else
-        my_each do |element|
-          argument == element && counter += 1
-        end
+      my_each do |element|
+        argument == element && counter += 1
       end
     end
     counter
@@ -208,10 +202,10 @@ module Enumerable
       new_arr = []
       my_each do |element|
         new_arr << if proc1.nil?
-                    yield(element)
-                  else
-                    proc1.call(element)
-                  end
+                     yield(element)
+                   else
+                     proc1.call(element)
+                   end
       end
       new_arr
     else
@@ -222,26 +216,25 @@ module Enumerable
   def my_inject(initial = nil, argument = nil)
     accum = 0
     if initial.nil? && argument.nil?
-      my_each_with_index { |element, index|
+      my_each_with_index do |element, index|
         break if index + 1 == length
-  
-        accum = if index == 0
+
+        accum = if index.zero?
                   yield(element, self[index + 1])
                 else
                   yield(accum, self[index + 1])
                 end
-              }
+      end
     elsif argument.nil?
       if initial.class == Symbol
         argument = initial
-        initial = nil
         my_each_with_index do |element, index|
           break if index + 1 == length
-    
+
           accum = if index.zero?
-                    eval "#{element} #{argument} #{self[index + 1]}"
+                    element.public_send argument.to_s, self[index + 1]
                   else
-                    eval "#{accum} #{argument} #{self[index + 1]}"
+                    accum.public_send argument.to_s, self[index + 1]
                   end
         end
       else
@@ -253,15 +246,17 @@ module Enumerable
     else
       accum = initial
       my_each do |element|
-        accum = eval "#{accum} #{argument} #{element}"
+        accum = accum.public_send argument.to_s, element
       end
     end
     accum
   end
-
 end
 
 def multiply_els(array)
   array.my_inject { |sum, num| sum * num }
 end
 
+array = [1, 2, 3, 4]
+
+p array.my_inject(:+)
