@@ -13,7 +13,7 @@
 To get a local copy up and running follow these simple example steps.
 
 - Clone this repository into your computer
-- To run, enter this command in your terminal (inside the project's directory) "ruby app.rb"
+- To run, enter this command in your terminal (inside the project's directory) `ruby app.rb`
 
 ### Prerequisites
 
@@ -25,15 +25,16 @@ Ruby and gem.
 
 ### Install
 
-Give the methods inside the file "app.rb" a random array and type in your terminal (inside the directory of the project) "ruby app.rb"
+Clone this repo with: `git clone https://github.com/len23/Advanced_Building_Blocks-Enumerables`\
+Give the methods inside the file `app.rb` a random array and type in your terminal (inside the directory of the project) `ruby app.rb`
 
 ### Usage
 
-Practicing to build the methods manually
+Follow the insctructions below in order to use this project:
 
-### Run tests
-
-rubocop
+- Open `app.rb` file in your favorite editor
+- You can check it with Rubocop
+- In your teminal run `ruby app.rb`
 
 ## Authors
 
