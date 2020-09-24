@@ -1,5 +1,6 @@
 require 'pry'
-
+# rubocop:disable Style/For
+# rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength
 module Enumerable
   def my_each
     if block_given?
@@ -260,3 +261,6 @@ end
 array = [1, 2, 3, 4]
 
 p array.my_inject(:+)
+
+# rubocop:enable Style/For
+# rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength
