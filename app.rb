@@ -122,7 +122,7 @@ module Enumerable
           break
         end
       end
-    elsif  argument.class == String
+    elsif argument.class == String
       my_each do |element|
         if element == argument
           boolean = true
@@ -236,10 +236,10 @@ module Enumerable
       if initial.class == Symbol
         argument = initial
         ary = if self.class == Range
-                self.to_a
+                to_a
               else
                 self
-        end
+              end
         ary.my_each_with_index do |element, index|
           break if index + 1 == ary.length
           accum = if index.zero?
@@ -262,17 +262,11 @@ module Enumerable
     end
     accum
   end
- 
 end
 
 def multiply_els(array)
   array.my_inject { |sum, num| sum * num }
 end
-
-
-p (1..5).my_inject(4) { |prod, n| prod * n }
-
-
 
 # rubocop:enable Style/For
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength
