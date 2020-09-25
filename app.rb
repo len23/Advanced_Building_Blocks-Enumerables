@@ -226,7 +226,6 @@ module Enumerable
     if initial.nil? && argument.nil?
       my_each_with_index do |element, index|
         break if index + 1 == length
-
         accum = if index.zero?
                   yield(element, self[index + 1])
                 else
@@ -236,14 +235,17 @@ module Enumerable
     elsif argument.nil?
       if initial.class == Symbol
         argument = initial
-        my_each_with_index do |element, index|
-          array_length = to_a.length
-          break if index + 1 == array_length
-
+        ary = if self.class == Range
+                self.to_a
+              else
+                self
+        end
+        ary.my_each_with_index do |element, index|
+          break if index + 1 == ary.length
           accum = if index.zero?
-                    element.public_send argument.to_s, self[index + 1]
+                    element.public_send argument.to_s, ary[index + 1]
                   else
-                    accum.public_send argument.to_s, self[index + 1]
+                    accum.public_send argument.to_s, ary[index + 1]
                   end
         end
       else
@@ -260,6 +262,7 @@ module Enumerable
     end
     accum
   end
+ 
 end
 
 def multiply_els(array)
@@ -267,7 +270,9 @@ def multiply_els(array)
 end
 
 
-p (5..10).my_inject(:*)
+p (1..5).my_inject(4) { |prod, n| prod * n }
+
+
 
 # rubocop:enable Style/For
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength
