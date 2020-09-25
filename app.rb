@@ -110,12 +110,19 @@ module Enumerable
       end
     elsif argument.class == Regexp
       my_each do |element|
-        unless argument.match?(element)
+        if argument.match?(element)
           boolean = true
           break
         end
       end
     elsif argument.class == Integer || argument.class == Float
+      my_each do |element|
+        if element == argument
+          boolean = true
+          break
+        end
+      end
+    elsif  argument.class == String
       my_each do |element|
         if element == argument
           boolean = true
@@ -230,7 +237,8 @@ module Enumerable
       if initial.class == Symbol
         argument = initial
         my_each_with_index do |element, index|
-          break if index + 1 == length
+          array_length = to_a.length
+          break if index + 1 == array_length
 
           accum = if index.zero?
                     element.public_send argument.to_s, self[index + 1]
@@ -258,9 +266,8 @@ def multiply_els(array)
   array.my_inject { |sum, num| sum * num }
 end
 
-array = [1, 2, 3, 4]
 
-p array.my_inject(:+)
+p (5..10).my_inject(:*)
 
 # rubocop:enable Style/For
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength
