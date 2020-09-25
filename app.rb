@@ -226,6 +226,7 @@ module Enumerable
     if initial.nil? && argument.nil?
       my_each_with_index do |element, index|
         break if index + 1 == length
+
         accum = if index.zero?
                   yield(element, self[index + 1])
                 else
@@ -242,6 +243,7 @@ module Enumerable
               end
         ary.my_each_with_index do |element, index|
           break if index + 1 == ary.length
+
           accum = if index.zero?
                     element.public_send argument.to_s, ary[index + 1]
                   else
