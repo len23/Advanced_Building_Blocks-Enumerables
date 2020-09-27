@@ -17,6 +17,7 @@ module Enumerable
     else
       to_enum :my_each
     end
+    self
   end
 
   def my_each_with_index
@@ -33,6 +34,7 @@ module Enumerable
     else
       to_enum :my_each_with_index
     end
+    self
   end
 
   def my_select
