@@ -1,7 +1,9 @@
 require 'pry'
 # rubocop:disable Style/For
-# rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength
+# rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/AbcSize, Style/MultipleComparison
 module Enumerable
+  BLANK_VALUE = Object.new
+
   def my_each
     if block_given?
       if is_a?(Range)
@@ -49,9 +51,9 @@ module Enumerable
     end
   end
 
-  def my_all?(argument = nil)
+  def my_all?(argument = BLANK_VALUE)
     boolean = true
-    if argument.nil?
+    if argument == BLANK_VALUE
       if block_given?
         my_each do |element|
           unless yield(element)
@@ -67,9 +69,37 @@ module Enumerable
           end
         end
       end
+    elsif argument.nil?
+      my_each do |element|
+        unless element.nil?
+          boolean = false
+          break
+        end
+      end
     elsif argument.class == Regexp
       my_each do |element|
         unless argument.match?(element)
+          boolean = false
+          break
+        end
+      end
+    elsif argument == Integer || argument == Float || argument == String || argument == Hash || argument == Array
+      my_each do |element|
+        unless element.class == argument
+          boolean = false
+          break
+        end
+      end
+    elsif argument == Numeric
+      my_each do |element|
+        unless element.class == Integer || element.class == Float || element.class == Complex
+          boolean = false
+          break
+        end
+      end
+    elsif argument == false || argument == true
+      my_each do |element|
+        unless element == argument
           boolean = false
           break
         end
@@ -273,4 +303,4 @@ def multiply_els(array)
 end
 
 # rubocop:enable Style/For
-# rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength
+# rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/AbcSize, Style/MultipleComparison
