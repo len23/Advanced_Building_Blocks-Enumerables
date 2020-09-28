@@ -16,10 +16,10 @@ module Enumerable
           yield(value)
         end
       end
+      self
     else
       to_enum :my_each
     end
-    self
   end
 
   def my_each_with_index
@@ -32,11 +32,10 @@ module Enumerable
       for index in 0..ary.length - 1 do
         yield(ary[index], index)
       end
-      ary
+      self
     else
       to_enum :my_each_with_index
     end
-    self
   end
 
   def my_select
@@ -191,7 +190,7 @@ module Enumerable
         end
       else
         my_each do |element|
-          if element == false || element.nil?
+          unless element == false || element.nil?
             boolean = false
             break
           end
