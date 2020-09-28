@@ -104,27 +104,20 @@ module Enumerable
           break
         end
       end
-    elsif argument.class == Integer || argument.class == Float
+    elsif argument.class == Integer || argument.class == Float || argument.class == String
       my_each do |element|
         unless element == argument
           boolean = false
           break
         end
       end
-    else
-      my_each do |element|
-        if element.class != argument
-          boolean = false
-          break
-        end
-      end
     end
     boolean
   end
 
-  def my_any?(argument = nil)
+  def my_any?(argument = BLANK_VALUE)
     boolean = false
-    if argument.nil?
+    if argument == BLANK_VALUE
       if block_given?
         my_each do |element|
           if yield(element)
@@ -134,10 +127,17 @@ module Enumerable
         end
       else
         my_each do |element|
-          unless element.nil? || element == false
+          if element == true
             boolean = true
             break
           end
+        end
+      end
+    elsif argument.nil?
+      my_each do |element|
+        if element.nil?
+          boolean = true
+          break
         end
       end
     elsif argument.class == Regexp
@@ -147,23 +147,30 @@ module Enumerable
           break
         end
       end
-    elsif argument.class == Integer || argument.class == Float
-      my_each do |element|
-        if element == argument
-          boolean = true
-          break
-        end
-      end
-    elsif argument.class == String
-      my_each do |element|
-        if element == argument
-          boolean = true
-          break
-        end
-      end
-    else
+    elsif argument == Integer || argument == Float || argument == String || argument == Hash || argument == Array
       my_each do |element|
         if element.class == argument
+          boolean = true
+          break
+        end
+      end
+    elsif argument == Numeric
+      my_each do |element|
+        if element.class == Integer || element.class == Float || element.class == Complex
+          boolean = true
+          break
+        end
+      end
+    elsif argument == false || argument == true
+      my_each do |element|
+        if element == argument
+          boolean = true
+          break
+        end
+      end
+    elsif argument.class == Integer || argument.class == Float || argument.class == String
+      my_each do |element|
+        if element == argument
           boolean = true
           break
         end
@@ -172,9 +179,9 @@ module Enumerable
     boolean
   end
 
-  def my_none?(argument = nil)
+  def my_none?(argument = BLANK_VALUE)
     boolean = true
-    if argument.nil?
+    if argument == BLANK_VALUE
       if block_given?
         my_each do |element|
           if yield(element)
@@ -184,10 +191,17 @@ module Enumerable
         end
       else
         my_each do |element|
-          unless element.nil? || element == false
+          if element == false || element.nil?
             boolean = false
             break
           end
+        end
+      end
+    elsif argument.nil?
+      my_each do |element|
+        unless element.nil?
+          boolean = false
+          break
         end
       end
     elsif argument.class == Regexp
@@ -197,16 +211,30 @@ module Enumerable
           break
         end
       end
-    elsif argument.class == Integer || argument.class == Float
+    elsif argument == Integer || argument == Float || argument == String || argument == Hash || argument == Array
+      my_each do |element|
+        if element.class == argument
+          boolean = false
+          break
+        end
+      end
+    elsif argument == Numeric
+      my_each do |element|
+        if element.class == Integer || element.class == Float || element.class == Complex
+          boolean = false
+          break
+        end
+      end
+    elsif argument == false || argument == true
       my_each do |element|
         if element == argument
           boolean = false
           break
         end
       end
-    else
+    elsif argument.class == Integer || argument.class == Float || argument.class == String
       my_each do |element|
-        if element.class == argument
+        if element == argument
           boolean = false
           break
         end
