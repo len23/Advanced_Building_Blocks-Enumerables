@@ -337,5 +337,3 @@ end
 
 # rubocop:enable Style/For
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/AbcSize, Style/MultipleComparison
-
-p (1..5).my_inject(4) { |prod, n| prod * n }
