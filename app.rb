@@ -284,13 +284,18 @@ module Enumerable
   def my_inject(initial = nil, argument = nil)
     accum = 0
     if initial.nil? && argument.nil?
+      ary = if is_a?(Range)
+              to_a
+            else
+              self
+            end
       my_each_with_index do |element, index|
-        break if index + 1 == length
+        break if index + 1 == ary.length
 
         accum = if index.zero?
-                  yield(element, self[index + 1])
+                  yield(element, ary[index + 1])
                 else
-                  yield(accum, self[index + 1])
+                  yield(accum, ary[index + 1])
                 end
       end
     elsif argument.nil?
@@ -332,3 +337,5 @@ end
 
 # rubocop:enable Style/For
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/AbcSize, Style/MultipleComparison
+
+p (1..5).my_inject(4) { |prod, n| prod * n }
