@@ -1,4 +1,3 @@
-require 'pry'
 # rubocop:disable Style/For
 # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/AbcSize, Style/MultipleComparison
 module Enumerable
@@ -336,3 +335,5 @@ end
 
 # rubocop:enable Style/For
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/AbcSize, Style/MultipleComparison
+
+p [1, 2, 3].to_enum
