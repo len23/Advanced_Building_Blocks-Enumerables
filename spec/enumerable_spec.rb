@@ -185,5 +185,23 @@ describe Enumerable do
       expect(threes_array.my_none?(4)).to eql true
     end
   end
+
+  describe '#my_count' do
+    it 'returns an integer that represents the number of the elements that satisfy the condition when a block is given' do
+      expect(array.my_count { |n| n.class == Integer }).to eql 3
+    end
+
+    it 'if an argument is given, the block will be ignored and will return the number of the elements that equal the argument' do
+      expect(threes_array.my_count(3) { |n| n.class == String }).to eql 3
+    end
+
+    it 'returns the length of the array or the range if no argument nor block is given' do
+      expect(array.my_count).to eql 3
+    end
+
+    it 'returns the number of the elements that equal the argument if only an argument is given' do
+      expect(array.my_count(3)).to eql 1
+    end
+  end
 end
 # rubocop:enable Layout/LineLength

@@ -338,5 +338,5 @@ end
 
 array = [false, false, false]
 # array.push("Im'")
-p array.my_any?
-p array.any?
+p array.my_count(false)
+p array.count(false)
