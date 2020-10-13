@@ -125,7 +125,7 @@ module Enumerable
         end
       else
         my_each do |element|
-          if element == true
+          if element != nil && element != false
             boolean = true
             break
           end
@@ -335,3 +335,8 @@ end
 
 # rubocop:enable Style/For
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/AbcSize, Style/MultipleComparison
+
+array = [false, false, false]
+# array.push("Im'")
+p array.my_any?
+p array.any?

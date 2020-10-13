@@ -2,7 +2,7 @@ require './app.rb'
 # rubocop:disable Layout/LineLength
 describe Enumerable do
   let(:array) { [1, 2, 3] }
-  let(:truthy_array) { [true, true, true] }
+  let(:falsy_array) { [false, false, false] }
   let(:string_array) { %w[hello hey heiyaa] }
   let(:hash_array) { [{ 'a': 1 }, { 'b': 2 }, { 'c': 3 }] }
   let(:threes_array) { [3, 3, 3] }
@@ -72,7 +72,7 @@ describe Enumerable do
     end
 
     it 'accepts an argument and returns true if all the element inside that array is equal to that argument' do
-      expect(truthy_array.my_all?(true)).to eql true
+      expect(falsy_array.my_all?(false)).to eql true
     end
 
     it 'returns true if the argument class is Regexp and all the elements inside the array match that argument' do
@@ -93,6 +93,48 @@ describe Enumerable do
 
     it 'returns true if the argument class is Integer, Float or String and all the elements inside that array equal the argument' do
       expect(threes_array.my_all?(3)).to eql true
+    end
+  end
+
+  describe '#my_any?' do
+    it 'returns true if no argument is given, a block is given and at least one of the elements satisfy the condition' do
+      expect(array.my_any? { |n| n == 1 }).to eql true
+    end
+
+    it "returns false when no argument is given, a block is given and all the elements don't satisfy the condition" do
+      expect(array.my_any? { |n| n > 3 }).to eql false
+    end
+
+    it "returns true if no argument is given, no block is given and at least one element is not nil neither false" do
+      falsy_array << 3
+      expect(falsy_array.my_any?).to eql true
+    end
+
+    it 'returns false if no argument is given, no block is given and all the elements are either nil or false' do
+      expect(falsy_array.my_any?).to eql false
+    end
+
+    it 'accepts an argument and returns true if at least one of the elements inside that array equal the argument' do
+      expect(falsy_array.my_any?(false)).to eql true
+    end
+
+    it 'returns true if the argument class is Regexp and at least one of the elements contains that argument' do
+      expect(string_array.my_any?(/lo/)).to eql true
+    end
+
+    it 'returns true if the argument is Integer, Float, String, Hash or Array and at least one of the element classes inside that array match the argument' do
+      falsy_array << "I'm a string"
+      expect(falsy_array.my_any?(String)).to eql true
+    end
+
+    it 'returns true if the argument is Numeric and any of the element classes is either Integer, Float or Complex' do
+      falsy_array << 3
+      expect(falsy_array.my_any?(Numeric)).to eql true
+    end
+
+    it 'returns true if the argument class is Integer, Float or String and any of the elements inside that array equal the argument' do
+      falsy_array << 3
+      expect(falsy_array.my_any?(3)).to eql true
     end
   end
 end
