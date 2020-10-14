@@ -125,7 +125,7 @@ module Enumerable
         end
       else
         my_each do |element|
-          if element.nil? == false && element.false? == false
+          if element.nil? == false && element != false
             boolean = true
             break
           end

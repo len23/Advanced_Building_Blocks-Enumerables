@@ -1,11 +1,12 @@
 require './app.rb'
+# rubocop:disable Metrics/LineLength: Line is too long
 describe Enumerable do
   let(:array) { [1, 2, 3] }
   let(:falsy_array) { [false, false, false] }
   let(:string_array) { %w[hello hey heiyaa] }
   let(:hash_array) { [{ 'a': 1 }, { 'b': 2 }, { 'c': 3 }] }
   let(:threes_array) { [3, 3, 3] }
-  let(:increment) { Proc.new { |n| n + 1 } }
+  let(:increment) { proc { |n| n + 1 } }
   let(:range) { (1..9) }
   describe '#my_each' do
     it "doesn't modify the original array" do
@@ -106,7 +107,7 @@ describe Enumerable do
       expect(array.my_any? { |n| n > 3 }).to eql(false)
     end
 
-    it "returns true if no argument is given, no block is given and at least one element is not nil neither false" do
+    it 'returns true if no argument is given, no block is given and at least one element is not nil neither false' do
       falsy_array << 3
       expect(falsy_array.my_any?).to eql(true)
     end
@@ -220,11 +221,11 @@ describe Enumerable do
 
     describe '#my_inject' do
       it 'accepts a block with 2 variables, an accumulator and array element, performs the block code and save the result inside the accumulator' do
-        expect(array.my_inject { |sum, elem| sum += elem }).to eql(6)
+        expect(array.my_inject { |sum, elem| sum + elem }).to eql(6)
       end
 
       it 'works on a range also' do
-        expect(range.my_inject { |sum, elem| sum += elem }).to eql(45)
+        expect(range.my_inject { |sum, elem| sum + elem }).to eql(45)
       end
 
       it 'performs the operation of the symbol if a symbol is only passed as an argument' do
@@ -232,7 +233,7 @@ describe Enumerable do
       end
 
       it 'accepts an initial accumulator when a value is passed in as an argument' do
-        expect(array.my_inject(3) { |sum, elem| sum += elem }).to eql(9)
+        expect(array.my_inject(3) { |sum, elem| sum + elem }).to eql(9)
       end
 
       it 'accepts an initial value and do the operations of the provided symbol' do
@@ -241,3 +242,4 @@ describe Enumerable do
     end
   end
 end
+# rubocop:enable Metrics/LineLength: Line is too long

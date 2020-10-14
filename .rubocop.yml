@@ -1,4 +1,6 @@
 AllCops:
+  TargetRubyVersion: 2.5.x
+
   Exclude:
     - "Guardfile"
     - "Rakefile"
