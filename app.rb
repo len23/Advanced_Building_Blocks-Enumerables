@@ -1,6 +1,5 @@
-require 'pry'
-# rubocop:disable Style/For
-# rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/AbcSize, Style/MultipleComparison
+# rubocop:disable Style/For, Style/MultipleComparison, Metrics/AbcSize
+# rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength
 module Enumerable
   BLANK_VALUE = Object.new
 
@@ -126,7 +125,7 @@ module Enumerable
         end
       else
         my_each do |element|
-          if element == true
+          if element.nil? == false && element != false
             boolean = true
             break
           end
@@ -334,5 +333,5 @@ def multiply_els(array)
   array.my_inject { |sum, num| sum * num }
 end
 
-# rubocop:enable Style/For
-# rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength, Metrics/AbcSize, Style/MultipleComparison
+# rubocop:enable Style/For, Style/MultipleComparison, Metrics/AbcSize
+# rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength, Metrics/MethodLength

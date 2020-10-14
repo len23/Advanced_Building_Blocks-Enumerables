@@ -36,6 +36,11 @@ Follow the insctructions below in order to use this project:
 - You can check it with Rubocop
 - In your teminal run `ruby app.rb`
 
+### Run tests
+
+- Install RSpec by typing in your terminal `gem install rspec`
+- After the installation is over, just type the command `rspec` in your teminal to check the results of the tests.
+
 ## Authors
 
 👤 **Martin Najjar**
