@@ -6,6 +6,7 @@ describe Enumerable do
   let(:string_array) { %w[hello hey heiyaa] }
   let(:hash_array) { [{ 'a': 1 }, { 'b': 2 }, { 'c': 3 }] }
   let(:threes_array) { [3, 3, 3] }
+  let(:increment) { Proc.new { |n| n + 1 } }
   describe '#my_each' do
     it "doesn't modify the original array" do
       expect(array.my_each { |n| n + 2 }).to eql array
@@ -201,6 +202,20 @@ describe Enumerable do
 
     it 'returns the number of the elements that equal the argument if only an argument is given' do
       expect(array.my_count(3)).to eql 1
+    end
+  end
+
+  describe '#my_map' do
+    it 'returns an enumerator when no argument nor block is given' do
+      expect(array.my_map).to be_an Enumerator
+    end
+
+    it 'returns a new array when a block is given' do
+      expect(array.my_map { |n| n + 1 }).not_to eql array
+    end
+
+    it 'returns a new array when a proc is given' do
+      expect(array.my_map(increment)).not_to eql array
     end
   end
 end
